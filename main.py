@@ -9,3 +9,7 @@ print('Hello World!')
 greeting = 'The fancy greeting!'
 
 print( greeting )
+
+# collection user's name:
+name = input( 'What is your name: ' )
+print( 'Nice to meet you, ', name)
