@@ -8,12 +8,18 @@ def main(stdscr):
 
     # get the size of the windown.
     sh, sw = stdscr.getmaxyx()
+    # set the center.
+    center = [sh // 2, sw // 2]
 
     # set up the game area.
     # top left and bottom right
     box = [[3,3], [sh - 3, sw - 3]]
     # draw the rectangle as the game area.
     textpad.rectangle( stdscr, box[0][0], box[0][1], box[1][0], box[1][1])
+    
+    # add message for exit game.
+    exitMsg = 'Press any key to exit!'
+    stdscr.addstr(sh - 2, center[1] - len(exitMsg) // 2, exitMsg)
 
     stdscr.refresh()
 
