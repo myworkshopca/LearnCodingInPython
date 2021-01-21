@@ -1,10 +1,13 @@
-from curses import textpad
 import curses
+from curses import textpad
 
 def main(stdscr):
 
     # set 0 to disable the flash.
     curses.curs_set(0)
+    # set up this to make the while loop work.
+    stdscr.nodelay(1)
+    stdscr.timeout(100)
 
     # get the size of the windown.
     sh, sw = stdscr.getmaxyx()
@@ -36,26 +39,30 @@ def main(stdscr):
     # move the snake
     while 1:
 
+        # we need this for timeout to work.
+        stdscr.getch()
+
         # get the current head.
         head = snake[0]
         # decide the new head.
         newHead = [head[0], head[1] + 1]
         # draw the new head.
-        stdscr.addstr(newHead[0], newHead[1], '#')
+        #stdscr.addstr(newHead[0], newHead[1], "#")
+        stdscr.addstr(newHead[0], newHead[1], "#")
         # add the new head to snake body.
         snake.insert(0, newHead)
         # remove the tailing unit of the snake, by draw an empty string.
-        stdscr.addstr(snake[-1][0], snake[-1][1], ' ')
+        stdscr.addstr(snake[-1][0], snake[-1][1], " ")
         # remove the tailing unit from the snake body.
         snake.pop()
-    
-    # add message for exit game.
-    exitMsg = 'Press any key to exit!'
-    stdscr.addstr(sh - 2, center[1] - len(exitMsg) // 2, exitMsg)
 
-    stdscr.refresh()
+    ## add message for exit game.
+    #exitMsg = 'Press any key to exit!'
+    #stdscr.addstr(sh - 2, center[1] - len(exitMsg) // 2, exitMsg)
 
-    # waiting for user input
-    stdscr.getch()
+    #stdscr.refresh()
+
+    ## waiting for user input
+    #stdscr.getch()
 
 curses.wrapper(main)
