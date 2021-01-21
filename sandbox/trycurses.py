@@ -32,20 +32,42 @@ def main(stdscr):
         [sh // 2, sw // 2 - 1]
     ]
 
-    #draw the snake
+    # draw the snake
     for point in snake:
         stdscr.addstr(point[0], point[1], "#")
+
+    # set direction for the snake. we will use key to set the direction.
+    # we will start with moving to right
+    direction = curses.KEY_RIGHT
 
     # move the snake
     while 1:
 
         # we need this for timeout to work.
-        stdscr.getch()
+        user_key = stdscr.getch()
+
+        # decide the direction based on user's input key
+        if (user_key == curses.KEY_UP or
+            user_key == curses.KEY_DOWN or
+            user_key == curses.KEY_RIGHT or
+            user_key == curses.KEY_LEFT):
+            # set the direction from user input key.
+            direction = user_key
+        # we will keep the existing direction for all other keys.
 
         # get the current head.
         head = snake[0]
-        # decide the new head.
-        newHead = [head[0], head[1] + 1]
+
+        # decide the new head based on the direction
+        if direction == curses.KEY_UP:
+            newHead = [head[0] - 1, head[1]]
+        elif direction == curses.KEY_DOWN:
+            newHead = [head[0] + 1, head[1]]
+        elif direction == curses.KEY_RIGHT:
+            newHead = [head[0], head[1] + 1]
+        elif direction == curses.KEY_LEFT:
+            newHead = [head[0], head[1] - 1]
+
         # draw the new head.
         #stdscr.addstr(newHead[0], newHead[1], "#")
         stdscr.addstr(newHead[0], newHead[1], "#")
