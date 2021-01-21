@@ -78,6 +78,17 @@ def main(stdscr):
         # remove the tailing unit from the snake body.
         snake.pop()
 
+        # Game over conditions
+        if (snake[0][0] in [box[0][0], box[1][0]] or
+            snake[0][1] in [box[0][1], box[1][1]]):
+            msg = "Game Over! Press any key to exit!"
+            stdscr.addstr(sh//2, sw//2 - len(msg)//2, msg)
+            # turn off the nodelay mode.
+            stdscr.nodelay(0)
+            # wait for user's input
+            stdscr.getch()
+            break
+
     ## add message for exit game.
     #exitMsg = 'Press any key to exit!'
     #stdscr.addstr(sh - 2, center[1] - len(exitMsg) // 2, exitMsg)
