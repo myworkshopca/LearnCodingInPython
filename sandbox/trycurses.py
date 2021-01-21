@@ -7,7 +7,8 @@ def main(stdscr):
     curses.curs_set(0)
     # set up this to make the while loop work.
     stdscr.nodelay(1)
-    stdscr.timeout(100)
+    # timeout is using millisecond (ms) as unit
+    stdscr.timeout(200)
 
     # get the size of the windown.
     sh, sw = stdscr.getmaxyx()
