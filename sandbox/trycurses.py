@@ -21,6 +21,8 @@ def main(stdscr):
     textpad.rectangle( stdscr, box[0][0], box[0][1], box[1][0], box[1][1])
 
     # define the snake.
+    # the first will be the head of the snake
+    # and the last will be the tail of the snake.
     snake = [
         [sh // 2, sw // 2 + 1],
         [sh // 2, sw // 2],
@@ -30,6 +32,22 @@ def main(stdscr):
     #draw the snake
     for point in snake:
         stdscr.addstr(point[0], point[1], "#")
+
+    # move the snake
+    while 1:
+
+        # get the current head.
+        head = snake[0]
+        # decide the new head.
+        newHead = [head[0], head[1] + 1]
+        # draw the new head.
+        stdscr.addstr(newHead[0], newHead[1], '#')
+        # add the new head to snake body.
+        snake.insert(0, newHead)
+        # remove the tailing unit of the snake, by draw an empty string.
+        stdscr.addstr(snake[-1][0], snake[-1][1], ' ')
+        # remove the tailing unit from the snake body.
+        snake.pop()
     
     # add message for exit game.
     exitMsg = 'Press any key to exit!'
