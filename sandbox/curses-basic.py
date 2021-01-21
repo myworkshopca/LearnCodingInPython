@@ -21,14 +21,16 @@ def main(stdscr):
         stdscr.addstr(y, 1, msg);
         y += 1
         if chr(userType) == 'Q':
-            # exit the while loop
-            stdscr.addstr(y, 1, 'Closing game ...')
-
-            # turn on the nodelay mode to use timeout
-            stdscr.nodelay(1)
-            stdscr.timeout(800)
-            # call getch in nodelay mode to sho the message.
-            stdscr.getch()
             break
+
+    # promote the exit message!
+    stdscr.addstr(y, 1, 'Closing game ...')
+
+    # turn on the nodelay mode so we could use timeout
+    stdscr.nodelay(1)
+    # timeout in ms
+    stdscr.timeout(800)
+    # call getch in nodelay mode to show the message.
+    stdscr.getch()
 
 curses.wrapper(main)
