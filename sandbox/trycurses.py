@@ -9,7 +9,7 @@ def main(stdscr):
     # set up this to make the while loop work.
     stdscr.nodelay(1)
     # timeout is using millisecond (ms) as unit
-    stdscr.timeout(200)
+    stdscr.timeout(100)
 
     # get the size of the windown.
     sh, sw = stdscr.getmaxyx()
