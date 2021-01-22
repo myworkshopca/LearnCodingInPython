@@ -1,5 +1,6 @@
 import curses
 from curses import textpad
+import random
 
 def main(stdscr):
 
@@ -12,7 +13,7 @@ def main(stdscr):
 
     # get the size of the windown.
     sh, sw = stdscr.getmaxyx()
-    # set the center.
+    # set the center. [y-axis, x-axis]
     center = [sh // 2, sw // 2]
 
     # set up the game area.
@@ -28,9 +29,9 @@ def main(stdscr):
     # the first will be the head of the snake
     # and the last will be the tail of the snake.
     snake = [
-        [sh // 2, sw // 2 + 1],
-        [sh // 2, sw // 2],
-        [sh // 2, sw // 2 - 1]
+        [center[0], center[1] + 1],
+        center,
+        [center[0], center[1] - 1],
     ]
 
     # draw the snake
@@ -40,6 +41,17 @@ def main(stdscr):
     # set direction for the snake. we will use key to set the direction.
     # we will start with moving to right
     direction = curses.KEY_RIGHT
+
+    # produce snake food, it will have format [y-axis, x-axis]
+    # generate random number to decide the location of the snake food.
+    # one food each time.
+    food = [
+        # the y axis
+        random.randint(box[0][0] + 1, box[1][0] - 1),
+        # the x axis
+        random.randint(box[0][1] + 1, box[1][1] - 1)
+    ]
+    stdscr.addstr(food[0], food[1], "*")
 
     # move the snake
     while 1:
@@ -82,21 +94,13 @@ def main(stdscr):
         # Game over conditions
         if (snake[0][0] in [box[0][0], box[1][0]] or
             snake[0][1] in [box[0][1], box[1][1]]):
+
             msg = "Game Over! Press any key to exit!"
-            stdscr.addstr(sh//2, sw//2 - len(msg)//2, msg)
+            stdscr.addstr(center[0], center[1] - len(msg)//2, msg)
             # turn off the nodelay mode.
             stdscr.nodelay(0)
             # wait for user's input
             stdscr.getch()
             break
-
-    ## add message for exit game.
-    #exitMsg = 'Press any key to exit!'
-    #stdscr.addstr(sh - 2, center[1] - len(exitMsg) // 2, exitMsg)
-
-    #stdscr.refresh()
-
-    ## waiting for user input
-    #stdscr.getch()
 
 curses.wrapper(main)
