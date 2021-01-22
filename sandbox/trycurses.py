@@ -25,12 +25,14 @@ def main(stdscr):
     # draw the rectangle as the game area.
     textpad.rectangle( stdscr, box[0][0], box[0][1], box[1][0], box[1][1])
 
-    # define the snake.
+    # define the snake, starts with 3 unit.
     # the first will be the head of the snake
     # and the last will be the tail of the snake.
     snake = [
+        # the heading unit
         [center[0], center[1] + 1],
         center,
+        # the tailing unit
         [center[0], center[1] - 1],
     ]
 
@@ -53,7 +55,18 @@ def main(stdscr):
     ]
     stdscr.addstr(food[0], food[1], "*")
 
-    # move the snake
+    # set the initial score to 0
+    score = 0
+
+    # keep the snake moveing.
+    # - while infinity loop to keep the snake moving.
+    # - move the snake by adding one heading unit and removing the tailing unit.
+    # - the direction will decide where to add the heading unit:
+    #   up, down, right or left
+    # how we handle food?
+    # - the snake will eat the food if its head move to the same unit of food
+    # - the sname will grow one unit after eat one food,
+    #   simply not remove the tailing unit.
     while 1:
 
         # we need this for timeout to work.
@@ -86,10 +99,27 @@ def main(stdscr):
         stdscr.addstr(newHead[0], newHead[1], "#")
         # add the new head to snake body.
         snake.insert(0, newHead)
-        # remove the tailing unit of the snake, by draw an empty string.
-        stdscr.addstr(snake[-1][0], snake[-1][1], " ")
-        # remove the tailing unit from the snake body.
-        snake.pop()
+
+        # after add new head, we will decide if we will remove the tail or not
+        # depends on the food.
+        if snake[0] == food:
+            # increase scored
+            score += 1
+            # produce new food.
+            food = [
+                # the y axis
+                random.randint(box[0][0] + 1, box[1][0] - 1),
+                # the x axis
+                random.randint(box[0][1] + 1, box[1][1] - 1)
+            ]
+            # draw the new food on board.
+            stdscr.addstr(food[0], food[1], "*")
+            # TODO: make it faster by reduce the timeout time.
+        else:
+            # remove the tailing unit of the snake, by draw an empty string.
+            stdscr.addstr(snake[-1][0], snake[-1][1], " ")
+            # remove the tailing unit from the snake body.
+            snake.pop()
 
         # Game over conditions
         if (snake[0][0] in [box[0][0], box[1][0]] or
