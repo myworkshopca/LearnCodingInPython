@@ -1,2 +1,5 @@
 # ignore all swp file from vim.
 *.swp
+
+# ignore __pycache__
+**/__pycache__
