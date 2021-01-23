@@ -4,6 +4,10 @@ def main(stdscr):
 
     curses.curs_set(1)
 
+    curses.start_color()
+    curses.use_default_colors()
+    curses.init_pair(1, 46, -1)
+
     # set 0 to turn off the nodelay mode.
     # we will wait for user's input.
     stdscr.nodelay(0);
@@ -18,7 +22,7 @@ def main(stdscr):
         # getch will return a ascii code for each key,
         # the function chr to conver a ascii code to a character
         msg = "{0} - {1}".format(userType, chr(userType))
-        stdscr.addstr(y, 1, msg);
+        stdscr.addstr(y, 1, msg, curses.color_pair(1));
         y += 1
         if chr(userType) == 'Q':
             break
