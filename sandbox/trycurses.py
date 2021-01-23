@@ -45,7 +45,8 @@ def main(stdscr):
 
     # draw the snake
     for point in snake:
-        stdscr.addstr(point[0], point[1], "#", curses.color_pair(1))
+        #stdscr.addstr(point[0], point[1], "#", curses.color_pair(1))
+        stdscr.addstr(point[0], point[1], chr(9724), curses.color_pair(1))
 
     # set direction for the snake. we will use key to set the direction.
     # we will start with moving to right
@@ -103,7 +104,7 @@ def main(stdscr):
 
         # draw the new head.
         #stdscr.addstr(newHead[0], newHead[1], "#")
-        stdscr.addstr(newHead[0], newHead[1], "#", curses.color_pair(1))
+        stdscr.addstr(newHead[0], newHead[1], chr(9724), curses.color_pair(1))
         # add the new head to snake body.
         snake.insert(0, newHead)
 
