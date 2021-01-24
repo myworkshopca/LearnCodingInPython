@@ -19,21 +19,26 @@ print(rangeMsg)
 guessMsg = "Guess the number: "
 guessNum = int(input(guessMsg))
 
-# check the number is correct or not!
-if guessNum == theNumber:
-    # get ready the guess message
-    awardMsg = """
+while True:
+
+    # check the number is correct or not!
+    if guessNum == theNumber:
+        # get ready the guess message
+        awardMsg = """
 %%%%%%%
-% You guess the number correct!
+% Congradulations!
+% You guess the number correctly!
 %%%%%%%
 """
-    print(awardMsg)
-else:
-    # get ready the guess again message.
-    again = """
+        print(awardMsg)
+    else:
+        # get ready the guess again message.
+        again = """
 --------------
 - You guess wrong number!
 - Try again!
 --------------
 """
-    print(again)
+        print(again)
+        print(rangeMsg)
+        guessNum = int(input(guessMsg))
