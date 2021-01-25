@@ -17,7 +17,7 @@ def screen(stdscr):
         y = random.randint(0, sh - 1)
         x = random.randint(0, sw - 1)
         
-        char = random.randint(0, 127)
+        char = random.randint(32, 126)
 
         stdscr.addstr(y, x, chr(char))
 
@@ -28,5 +28,3 @@ def screen(stdscr):
             break
 
 curses.wrapper(screen)
-KeyError
-
