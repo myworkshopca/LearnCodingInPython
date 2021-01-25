@@ -16,11 +16,17 @@ def screen(stdscr):
     while True:
         y = random.randint(0, sh - 1)
         x = random.randint(0, sw - 1)
+        
+        char = random.randint(0, 127)
 
-        stdscr.addstr(y, x, "@")
+        stdscr.addstr(y, x, chr(char))
 
         userType = stdscr.getch()
-        if chr(userType) == "Q":
+        # ESC key is 27
+        # process ESC key to exit.
+        if userType == 27:
             break
 
 curses.wrapper(screen)
+KeyError
+
