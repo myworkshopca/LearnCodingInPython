@@ -10,6 +10,7 @@ def screen(stdscr):
     curses.start_color()
     curses.use_default_colors()
     for i in range(0, curses.COLORS):
+        # pair number, foreground color, background color
         curses.init_pair(i + 1, i, -1)
 
     # get screen height and width.
