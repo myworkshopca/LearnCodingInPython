@@ -12,7 +12,7 @@ def screen(stdscr):
     for i in range(0, curses.COLORS):
         # pair number, foreground color, background color
         curses.init_pair(i + 1, i, -1)
-        stdscr.addstr("[{0}]".format(i + 1), curses.color_pair(i + 1))
+        stdscr.addstr("<{0}>".format(i + 1), curses.color_pair(i + 1))
 
     stdscr.getch()
 
