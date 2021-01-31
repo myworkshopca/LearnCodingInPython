@@ -25,6 +25,7 @@ def main(stdscr):
             continue
         else:
             border_ch = chr(userType)
+            # paint the border.
             for x in range(margin, sw - margin):
                 stdscr.addstr(margin, x, border_ch)
                 stdscr.addstr(sh - margin, x, border_ch)
@@ -32,5 +33,8 @@ def main(stdscr):
             for y in range(margin, sh - margin + 1):
                 stdscr.addstr(y, margin, border_ch)
                 stdscr.addstr(y, sw - margin, border_ch)
+            # show the message at the center.
+            user_msg = "You typed {0}, ASCII code: {1}".format(chr(userType), userType)
+            stdscr.addstr(sh // 2, sw // 2 - len(user_msg) // 2, user_msg)
 
 curses.wrapper(main)
