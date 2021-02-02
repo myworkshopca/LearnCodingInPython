@@ -8,6 +8,7 @@ def main(stdscr):
     curses.use_default_colors()
     # set pair 1 to green.
     curses.init_pair(1, 46, -1)
+    #curses.init_pair(1, 255, -1)
     # set pair 2 to red
     curses.init_pair(2, 196, -1)
 
@@ -16,7 +17,7 @@ def main(stdscr):
     # set up this to make the while loop work.
     stdscr.nodelay(1)
     # timeout is using millisecond (ms) as unit
-    stdscr.timeout(20)
+    stdscr.timeout(50)
 
     # get the size of the windown.
     sh, sw = stdscr.getmaxyx()
@@ -42,7 +43,7 @@ def main(stdscr):
         # the tailing unit
         [center[0], center[1] - 1],
     ]
-    body_ch = chr(9724) # 128523, 9899
+    body_ch = chr(9608) # 9724, 128523, 9899
 
     # draw the snake
     for point in snake:
