@@ -2,7 +2,7 @@ import curses
 
 def window(stdscr):
 
-    curses.curs_set(0)
+    #curses.curs_set(0)
 
     # get size of the screen.
     sh, sw = stdscr.getmaxyx()
@@ -37,6 +37,47 @@ def window(stdscr):
     # paint the ending ▼ 9660
     stdscr.addstr(sh - 1, 3, chr(9660))
 
-    stdscr.getch()
+    while True:
+        stdscr.addstr(sh - 10, sw - 50, 'Enter Y axis: ')
+        # user input string.
+        user_i = ''
+        while True:
+            key = stdscr.getch()
+            if key >= 48 and key <= 57:
+                user_i = user_i + chr(key)
+                stdscr.addstr(chr(key))
+            elif key == 10:
+                break
+            else:
+                continue
+        # set the y axis
+        user_y = int(user_i)
+
+        stdscr.addstr(sh - 9, sw - 50, 'Enter X axis: ')
+        # reset the user input string
+        user_i = ''
+        while True:
+            key = stdscr.getch()
+            if key >= 48 and key <= 57:
+                user_i = user_i + chr(key)
+                stdscr.addstr(chr(key))
+            elif key == 10:
+                break
+            else:
+                continue
+
+        # set the y axis
+        user_x = int(user_i)
+
+        # paint the user input.
+        stdscr.addstr(user_y, user_x, "X")
+        key = stdscr.getch()
+        # exit when it is ESC
+        if key == 27:
+            break
+        else:
+            # start over.
+            stdscr.addstr(sh - 10, sw - 50, ' ' * 30)
+            stdscr.addstr(sh - 9, sw - 50, ' ' * 30)
 
 curses.wrapper(window)
