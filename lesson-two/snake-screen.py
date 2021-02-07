@@ -6,18 +6,19 @@ def main(stdscr):
 
     curses.start_color()
     curses.use_default_colors()
-    # set pair 1 to green.
-    curses.init_pair(1, 46, -1)
-    #curses.init_pair(1, 255, -1)
-    # set pair 2 to red
-    curses.init_pair(2, 196, -1)
+
+    # initialize the color pairs:
+    for i in range(0, curses.COLORS):
+    #for i in range(0, 20):
+        # pair number, foreground color, background color
+        curses.init_pair(i + 1, i, -1)
 
     # set 0 to disable the flash.
     curses.curs_set(0)
     # set up this to make the while loop work.
     stdscr.nodelay(1)
     # timeout is using millisecond (ms) as unit
-    stdscr.timeout(50)
+    stdscr.timeout(100)
 
     # get the size of the windown.
     sh, sw = stdscr.getmaxyx()
@@ -36,18 +37,19 @@ def main(stdscr):
     # define the snake, starts with 3 unit.
     # the first will be the head of the snake
     # and the last will be the tail of the snake.
+    # set the initial color to 47
     snake = [
         # the heading unit
-        [center[0], center[1] + 1],
-        center,
+        [center[0], center[1] + 1, 47],
+        [center[0], center[1], 47],
         # the tailing unit
-        [center[0], center[1] - 1],
+        [center[0], center[1] - 1, 47],
     ]
     body_ch = chr(9608) # 9724, 128523, 9899
 
     # draw the snake
     for point in snake:
-        stdscr.addstr(point[0], point[1], body_ch, curses.color_pair(1))
+        stdscr.addstr(point[0], point[1], body_ch, curses.color_pair(point[2]))
 
     # set direction for the snake. we will use key to set the direction.
     # we will start with moving to right
@@ -60,9 +62,11 @@ def main(stdscr):
         # the y axis
         random.randint(box[0][0] + 1, box[1][0] - 1),
         # the x axis
-        random.randint(box[0][1] + 1, box[1][1] - 1)
+        random.randint(box[0][1] + 1, box[1][1] - 1),
+        # get color.
+        random.randint(18, 231)
     ]
-    stdscr.addstr(food[0], food[1], "*", curses.color_pair(2))
+    stdscr.addstr(food[0], food[1], "*", curses.color_pair(food[2]))
 
     # set the initial score to 0
     score = 0
@@ -79,6 +83,8 @@ def main(stdscr):
     while 1:
         # we need this for timeout to work.
         user_key = stdscr.getch()
+        if user_key == 27:
+            break
 
         # get the current head.
         head = snake[0]
@@ -99,34 +105,38 @@ def main(stdscr):
         # we will keep the existing direction for all other keys.
 
         # decide the new head based on the direction
+        new_head_color = random.randint(18, 231)
         if direction == curses.KEY_UP:
-            newHead = [head[0] - 1, head[1]]
+            newHead = [head[0] - 1, head[1], new_head_color]
         elif direction == curses.KEY_DOWN:
-            newHead = [head[0] + 1, head[1]]
+            newHead = [head[0] + 1, head[1], new_head_color]
         elif direction == curses.KEY_RIGHT:
-            newHead = [head[0], head[1] + 1]
+            newHead = [head[0], head[1] + 1, new_head_color]
         elif direction == curses.KEY_LEFT:
-            newHead = [head[0], head[1] - 1]
+            newHead = [head[0], head[1] - 1, new_head_color]
 
         # draw the new head.
-        stdscr.addstr(newHead[0], newHead[1], body_ch, curses.color_pair(1))
+        stdscr.addstr(newHead[0], newHead[1], body_ch, curses.color_pair(newHead[2]))
         # add the new head to snake body.
         snake.insert(0, newHead)
 
         # after add new head, we will decide if we will remove the tail or not
         # depends on the food.
-        if snake[0] == food:
+        if snake[0][0] == food[0] and snake[0][1] == food[1]:
             # increase scored
             score += 1
+            # update snake head's color.
+            snake[0][2] = food[2]
             # produce new food.
             food = [
                 # the y axis
                 random.randint(box[0][0] + 1, box[1][0] - 1),
                 # the x axis
-                random.randint(box[0][1] + 1, box[1][1] - 1)
+                random.randint(box[0][1] + 1, box[1][1] - 1),
+                random.randint(18, 231)
             ]
             # draw the new food on board.
-            stdscr.addstr(food[0], food[1], "*", curses.color_pair(2))
+            stdscr.addstr(food[0], food[1], "*", curses.color_pair(food[2]))
             # TODO: make it faster by reduce the timeout time.
         else:
             # remove the tailing unit of the snake, by draw an empty string.
