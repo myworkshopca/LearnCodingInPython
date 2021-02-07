@@ -2,6 +2,16 @@ import curses
 from curses import textpad
 import random
 
+def paint_score(stdscr, score):
+
+    sh, sw = stdscr.getmaxyx()
+    # paint score:
+    stdscr.addstr(3, sw // 4, 'SCORE: ', curses.color_pair(10))
+    stdscr.addstr(str(score), curses.color_pair(12))
+
+"""
+The main function
+"""
 def main(stdscr):
 
     curses.start_color()
@@ -18,17 +28,24 @@ def main(stdscr):
     # set up this to make the while loop work.
     stdscr.nodelay(1)
     # timeout is using millisecond (ms) as unit
-    stdscr.timeout(100)
+    stdscr.timeout(50)
 
     # get the size of the windown.
     sh, sw = stdscr.getmaxyx()
     # set the center. [y-axis, x-axis]
     center = [sh // 2, sw // 2]
 
+    # set the welcome message.
+    welcome_msg = 'Snake Game'
+    stdscr.addstr(1, center[1] - len(welcome_msg) // 2, welcome_msg)
+    # paint the welcome message.
+    welcome_msg = 'Press arrow keys to change direction and Press ESC key to exist!'
+    stdscr.addstr(2, center[1] - len(welcome_msg) // 2, welcome_msg)
+
     # set up the game area.
     # top left and bottom right
     box = [
-        [3, 3],
+        [4, 3],
         [sh - 3, sw - 3]
     ]
     # draw the rectangle as the game area.
@@ -70,6 +87,8 @@ def main(stdscr):
 
     # set the initial score to 0
     score = 0
+    paint_score(stdscr, score)
+    score_step = 10
 
     # keep the snake moveing.
     # - while infinity loop to keep the snake moving.
@@ -124,9 +143,13 @@ def main(stdscr):
         # depends on the food.
         if snake[0][0] == food[0] and snake[0][1] == food[1]:
             # increase scored
-            score += 1
-            # update snake head's color.
-            snake[0][2] = food[2]
+            score += score_step
+            paint_score(stdscr, score)
+
+            #for i in range(0, 3)
+            #    snake.insert(0, newHead)
+            #    # update snake head's color.
+            #    snake[0][2] = food[2]
             # produce new food.
             food = [
                 # the y axis
