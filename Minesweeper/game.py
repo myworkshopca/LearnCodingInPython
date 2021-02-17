@@ -18,20 +18,22 @@ def sweeper(stdscr):
     # set size of the field.
     field_size = 10
     # the initial mine field with 2 cells in the first row.
-    field = [[[0,0]] * field_size] * field_size
+    field = []
     # using row (r) and column (c) for index.
     r, c = 0, 0
     # we paint the row (y-axis) one after another.
     for y in range(center[0] - field_size, center[0] + field_size):
         # we paint the column (x-axis) with one cell empty
+        field.append([[0,0]] * field_size * 2)
         for x in range(center[1] - field_size * 2, center[1] + field_size * 2, 2):
-            #print('r={}, c={}'.format(r,c))
-            #field[r][c] = [y, x]
+            field[r][c] = [y, x]
             stdscr.addstr(y, x, cell_ch)
             # increase the column index.
             c = c + 1
         # increase the row.
         r = r + 1
+        # reset the column index.
+        c = 0
 
     # paint the reverse cell for the first cell.
     stdscr.addstr(field[0][0][0], field[0][0][1], cell_ch, curses.A_REVERSE)
