@@ -12,12 +12,16 @@ def sweeper(stdscr):
     # set the center. [y-axis, x-axis]
     center = [sh // 2, sw // 2]
 
-    # define the char for cell ◼ is 9724
-    cell_ch = chr(9724)
+    # define the char for cell 
+    # 🏁 127937
+    # ✸ 10040 ❂ 10050 ✹ 10041
+    # █ 9608 ◼ 9724
+    # ⚑ 9873
+    cell_ch = chr(9873)
 
     # paint the minefield.
     # set size of the field, by row x column
-    field_size = [16, 30]
+    field_size = [16, 30] # [16, 30]
     # the initial minefield with 2 cells in the first row.
     field = []
     # using row (r) and column (c) for index.
@@ -105,16 +109,20 @@ def sweeper(stdscr):
             break;
 
         # decide the new head based on the direction
-        if user_key == curses.KEY_UP:
+        if user_key in [curses.KEY_UP, 107]:
+            # k (107) for up
             if r > 0:
                 nr = r - 1
-        elif user_key == curses.KEY_DOWN:
+        elif user_key in [curses.KEY_DOWN, 106]:
+            # j (106) for down
             if r < field_size[0] - 1:
                 nr = r + 1
-        elif user_key == curses.KEY_RIGHT:
+        elif user_key in [curses.KEY_RIGHT, 108]:
+            # l (108) for right
             if c < field_size[1] - 1:
                 nc = c + 1
-        elif user_key == curses.KEY_LEFT:
+        elif user_key in [curses.KEY_LEFT, 104]:
+            # h (104) for left
             if c > 0:
                 nc = c - 1
 
