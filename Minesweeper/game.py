@@ -15,18 +15,21 @@ def sweeper(stdscr):
     cell_ch = chr(9724)
 
     # paint the minefield.
-    # set size of the field.
-    field_size = 10
+    # set size of the field, by row x column
+    field_size = [16, 30]
     # the initial mine field with 2 cells in the first row.
     field = []
     # using row (r) and column (c) for index.
     r, c = 0, 0
     # we paint the row (y-axis) one after another.
-    for y in range(center[0] - field_size, center[0] + field_size):
+    for y in range(center[0] - field_size[0] // 2, 
+                   center[0] + field_size[0] // 2):
         # we paint the column (x-axis) with one cell empty
-        field.append([[0,0]] * field_size * 2)
-        for x in range(center[1] - field_size * 2, center[1] + field_size * 2, 2):
-            field[r][c] = [y, x]
+        # so it will be step in 2 instead of 1
+        field.append([[0, 0, 0, 0]] * field_size[1])
+        for x in range(center[1] - field_size[1],
+                       center[1] + field_size[1], 2):
+            field[r][c] = [y, x, 0, 0]
             stdscr.addstr(y, x, cell_ch)
             # increase the column index.
             c = c + 1
@@ -55,10 +58,10 @@ def sweeper(stdscr):
             if r > 0:
                 nr = r - 1
         elif user_key == curses.KEY_DOWN:
-            if r < field_size * 2 - 1:
+            if r < field_size[0] - 1:
                 nr = r + 1
         elif user_key == curses.KEY_RIGHT:
-            if c < field_size * 2 - 1:
+            if c < field_size[1] - 1:
                 nc = c + 1
         elif user_key == curses.KEY_LEFT:
             if c > 0:
