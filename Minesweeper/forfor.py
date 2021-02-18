@@ -1,7 +1,7 @@
 
 center = [60, 20]
 # set size of the field.
-field_size = 3 
+field_size = 2 
 # the initial mine field with 2 cells in the first row.
 field = []
 #print(field)
