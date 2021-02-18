@@ -7,10 +7,11 @@ def screen(stdscr):
     curses.curs_set(0)
 
     # set the block character
+    # These not working well for terminal! 🏁 127937 
     # ✸ 10040 ❂ 10050 ✹ 10041
     # █ 9608 ◼ 9724
     # ⚑ 9873 ⚐ 9872
-    block = chr(9608)
+    block = chr(9873)
     # set the block column and rows
     block_c = 4
     block_r = 1
