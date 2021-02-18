@@ -1,5 +1,6 @@
 import curses
 import random
+import math
 
 def sweeper(stdscr):
 
@@ -17,14 +18,14 @@ def sweeper(stdscr):
     # paint the minefield.
     # set size of the field, by row x column
     field_size = [16, 30]
-    # the initial mine field with 2 cells in the first row.
+    # the initial minefield with 2 cells in the first row.
     field = []
     # using row (r) and column (c) for index.
     r, c = 0, 0
-    # we paint the row (y-axis) one after another.
+    # paint the row (y-axis) one after another.
     for y in range(center[0] - field_size[0] // 2, 
                    center[0] + field_size[0] // 2):
-        # we paint the column (x-axis) with one cell empty
+        # paint the column (x-axis) with one cell empty
         # so it will be step in 2 instead of 1
         field.append([[0, 0, 0, 0]] * field_size[1])
         for x in range(center[1] - field_size[1],
@@ -38,6 +39,56 @@ def sweeper(stdscr):
         # reset the column index.
         c = 0
 
+    # Generate values for the minefield:
+    # number of bombs 
+    # - -1 bomb cell
+    # - 0 - 8 bomb-free cell, the number will tell the total number of mines
+    #   in the surrounding cells.
+    # decide how many mines we will burry into the field.
+    # 20% of total cells will be an expert level.
+    # so we start with 12%, which is 1/8 of the total cells.
+    # set variable i to count mines
+    i = 0
+    while i < math.prod(field_size) // 7:
+        # generate a random number less than the total number of cells
+        index = random.randint(0, math.prod(field_size) - 1)
+        # calculate the row by divide the column size
+        r = index // field_size[1]
+        c = index - r * field_size[1]
+        if field[r][c][2] == -1:
+            # there is already a bomb in this cell.
+            continue
+        else:
+            field[r][c][2] = -1
+            # increase the bomb count.
+            i = i + 1
+
+    # calcute the number of bombs in surrounding cells.
+    for y in range(0, field_size[0]):
+        for x in range(0, field_size[1]):
+            if field[y][x][2] == -1:
+                # this cell al ready filled with bomb.
+                continue # skip...
+
+            # looking for the surrounding cells.
+            for sy in range(y - 1, y + 1 + 1):
+                for sx in range(x - 1, x + 1 + 1):
+                    if (sy < 0 or sy >= field_size[0] or
+                        sx < 0 or sx >= field_size[1]):
+                        # out of field.
+                        continue # just skip
+                    elif sy == y and sx == x:
+                        # this is itself
+                        continue # just skip
+                    else:
+                        if field[sy][sx][2] == -1:
+                            # this cell filled with mine.
+                            field[y][x][2] = field[y][x][2] + 1
+
+            # Paint the number for quick test.
+            stdscr.addstr(field[y][x][0], field[y][x][1], str(field[y][x][2]))
+
+    # paint the reverse cell to show the cursor!
     # set current row and column.
     r, c = 0, 0
     # paint the reverse cell for the first cell.
