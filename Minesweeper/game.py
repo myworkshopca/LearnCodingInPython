@@ -2,10 +2,40 @@ import curses
 import random
 import math
 
+# utility function to initialize color pairs.
+def colordict():
+
+    # initialize the color pair
+    curses.start_color()
+    curses.use_default_colors()
+    color_perrow = 16
+
+    for i in range(0, curses.COLORS):
+    #for i in range(0, 20):
+        # pair number, foreground color, background color
+        curses.init_pair(i + 1, i, -1)
+
+    return {
+        "cover": curses.color_pair(9), # grey
+        "flag": curses.color_pair(12), # yellow
+        "0": curses.color_pair(1), 
+        "1": curses.color_pair(13), # blue
+        "2": curses.color_pair(48), # Green
+        "3": curses.color_pair(10), # red
+        "4": curses.color_pair(52), # 
+        "5": curses.color_pair(94), # 
+        "6": curses.color_pair(203), # 
+        "7": curses.color_pair(90), # 
+        "8": curses.color_pair(178), # 
+    }
+
+# the main function
 def sweeper(stdscr):
 
     # set 0 to hide the cursor.
     curses.curs_set(0)
+
+    colors = colordict()
 
     # get the size of the windown.
     sh, sw = stdscr.getmaxyx()
@@ -13,11 +43,10 @@ def sweeper(stdscr):
     center = [sh // 2, sw // 2]
 
     # define the char for cell 
-    # 🏁 127937
     # ✸ 10040 ❂ 10050 ✹ 10041
     # █ 9608 ◼ 9724
     # ⚑ 9873
-    cell_ch = chr(9873)
+    cell_ch = chr(9608)
 
     # paint the minefield.
     # set size of the field, by row x column
@@ -35,7 +64,7 @@ def sweeper(stdscr):
         for x in range(center[1] - field_size[1],
                        center[1] + field_size[1], 2):
             field[r][c] = [y, x, 0, 0]
-            stdscr.addstr(y, x, cell_ch)
+            stdscr.addstr(y, x, cell_ch, colors["cover"])
             # increase the column index.
             c = c + 1
         # increase the row.
@@ -90,7 +119,8 @@ def sweeper(stdscr):
                             field[y][x][2] = field[y][x][2] + 1
 
             # Paint the number for quick test.
-            stdscr.addstr(field[y][x][0], field[y][x][1], str(field[y][x][2]))
+            n = str(field[y][x][2])
+            stdscr.addstr(field[y][x][0], field[y][x][1], n, colors[n])
 
     # paint the reverse cell to show the cursor!
     # set current row and column.

@@ -25,6 +25,7 @@ def screen(stdscr):
     #for i in range(0, 20):
         # pair number, foreground color, background color
         curses.init_pair(i + 1, i, -1)
+        #curses.init_pair(i + 1, i, 8)
         the_color = curses.color_pair(i + 1)
 
         # calculate the y-axis.
@@ -41,6 +42,8 @@ def screen(stdscr):
         
         # paint the color pair id.
         stdscr.addstr(y * (block_r + 1) + block_r, x * block_c, str(i + 1), the_color)
+        # paint a white space to check the color
+        stdscr.addstr(' ', the_color)
 
     # hold the window until user type any key.
     stdscr.getch()
