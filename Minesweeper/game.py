@@ -25,7 +25,8 @@ def colordict():
         "cover": curses.color_pair(9), # grey
         "flag": curses.color_pair(12), # yellow
         "blasted": curses.color_pair(300),
-        "-1": curses.color_pair(16),
+        #"-1": curses.color_pair(16),
+        "-1": curses.color_pair(53),
         "0": curses.color_pair(1), 
         "1": curses.color_pair(13), # blue
         "2": curses.color_pair(48), # Green
