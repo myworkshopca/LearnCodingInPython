@@ -82,8 +82,18 @@ def paintcell(stdscr, cell, colors, reverse=False, show=False):
 """
 dig a cell
 """
-def digcell():
-    return
+def digcell(cell):
+
+    if cell[3] in ['flagged', 'revealed']:
+        # do nothing if cell is flagged or revealed!
+        return
+
+    # check if this cell is a bomb
+    if cell[2] < 0:
+        # set the cell's status to blasted!
+        cell[3] = "blasted"
+    else:
+        cell[3] = "revealed"
 
 """
 flag a cell
@@ -98,9 +108,50 @@ def flagcell(cell):
     # we will NOT do anything for other status.
 
 """
-dig a cell
+open surrounding cells except the flagged cell.
 """
-def opensurrounding():
+def opensurrounding(stdscr, colors, field, field_size, y, x):
+
+    # looking for the surrounding cells.
+    for sy in range(y - 1, y + 1 + 1):
+        for sx in range(x - 1, x + 1 + 1):
+            if (sy < 0 or sy >= field_size[0] or
+                sx < 0 or sx >= field_size[1]):
+                # out of field.
+                continue # just skip
+            elif sy == y and sx == x:
+                # this is itself
+                continue # just skip
+            elif field[sy][sx][3] == "flagged":
+                # this cell is flagged, skip
+                continue
+            elif field[sy][sx][3] == "revealed":
+                # this cell is revealed, skip
+                continue
+            elif field[sy][sx][2] == -1:
+                # blasted. set status.
+                field[sy][sx][3] = 'blasted'
+                # call game over.
+                gameover()
+            elif field[sy][sx][2] == 0:
+                # update status first
+                field[sy][sx][3] = 'revealed'
+                # number of bombs surrounding is 0
+                # tells there is no bombs around.
+                # So we open all surroundings.
+                # call itself again.
+                opensurrounding(stdscr, colors, field, field_size, sy, sx)
+            else:
+                # set status to revealed.
+                field[sy][sx][3] = 'revealed'
+
+            # repaint this surrounding cell normally
+            paintcell(stdscr, field[sy][sx], colors)
+
+"""
+Game over logic
+"""
+def gameover():
     return
 
 # the main function
@@ -228,7 +279,14 @@ def sweeper(stdscr):
                 nc = c - 1
         elif user_key == 100:
             # letter d will do dig.
-            digcell()
+            digcell(field[r][c])
+            # repaint after dig!
+            paintcell(stdscr, field[r][c], colors, True)
+            if field[r][c][3] == 'blasted':
+                # game over
+                gameover()
+            elif field[r][c][3] == 'revealed' and field[r][c][2] == 0:
+                opensurrounding(stdscr, colors, field, field_size, r, c)
         elif user_key == 102:
             # letter f (102) flag / unflag cell.
             flagcell(field[r][c])
@@ -236,7 +294,9 @@ def sweeper(stdscr):
             paintcell(stdscr, field[r][c], colors, True)
         elif user_key == 32:
             # white space (32) reveal all surrounding cells.
-            opensurrounding()
+            if field[r][c][3] == 'revealed':
+                # only open the revealed cell.
+                opensurrounding(stdscr, colors, field, field_size, r, c)
 
         if nr == r and nc == c:
             # nothing change,
