@@ -2,7 +2,10 @@ import curses
 import random
 import math
 
-# utility function to initialize color pairs.
+"""
+utility function to initialize color pairs.
+return the color set in a dictionary
+"""
 def colordict():
 
     # initialize the color pair
@@ -15,9 +18,14 @@ def colordict():
         # pair number, foreground color, background color
         curses.init_pair(i + 1, i, -1)
 
+    # black on red background
+    curses.init_pair(300, 0, 9)
+
     return {
         "cover": curses.color_pair(9), # grey
         "flag": curses.color_pair(12), # yellow
+        "blasted": curses.color_pair(300),
+        "-1": curses.color_pair(16),
         "0": curses.color_pair(1), 
         "1": curses.color_pair(13), # blue
         "2": curses.color_pair(48), # Green
@@ -28,6 +36,47 @@ def colordict():
         "7": curses.color_pair(90), # 
         "8": curses.color_pair(178), # 
     }
+
+"""
+this function will paint the cell based on the number of bombs
+and the cell status: covered, revealed, flagged.
+
+hare are list of characters we can use.
+ ✸ 10040 ❂ 10050 ✹ 10041
+ █ 9608 ◼ 9724
+ ⚑ 9873
+"""
+def paintcell(stdscr, cell, colors, reverse=False, show=False):
+
+    # check if need show all
+    if show:
+        status = "revealed"
+    else:
+        status = cell[3]
+
+    # get the character for the cell based on the cell's status.
+    # cell's status stored as the 3rd item.
+    if status == 'covered':
+        cell_ch = chr(9608)
+        cell_color = colors['cover']
+    elif status == 'flagged':
+        cell_ch = chr(9873)
+        cell_color = colors['flag']
+    elif status == 'blasted':
+        cell_ch = chr(10041)
+        cell_color = colors['blasted']
+    else:
+        if cell[2] < 0:
+            cell_ch = chr(10041)
+            cell_color = colors["-1"]
+        else:
+            cell_ch = str(cell[2])
+            cell_color = colors[cell_ch]
+
+    if reverse:
+        stdscr.addstr(cell[0], cell[1], cell_ch, curses.A_REVERSE)
+    else:
+        stdscr.addstr(cell[0], cell[1], cell_ch, cell_color)
 
 # the main function
 def sweeper(stdscr):
@@ -42,15 +91,9 @@ def sweeper(stdscr):
     # set the center. [y-axis, x-axis]
     center = [sh // 2, sw // 2]
 
-    # define the char for cell 
-    # ✸ 10040 ❂ 10050 ✹ 10041
-    # █ 9608 ◼ 9724
-    # ⚑ 9873
-    cell_ch = chr(9608)
-
     # paint the minefield.
     # set size of the field, by row x column
-    field_size = [16, 30] # [16, 30]
+    field_size = [20, 36] # [16, 30]
     # the initial minefield with 2 cells in the first row.
     field = []
     # using row (r) and column (c) for index.
@@ -63,8 +106,9 @@ def sweeper(stdscr):
         field.append([[0, 0, 0, 0]] * field_size[1])
         for x in range(center[1] - field_size[1],
                        center[1] + field_size[1], 2):
-            field[r][c] = [y, x, 0, 0]
-            stdscr.addstr(y, x, cell_ch, colors["cover"])
+            field[r][c] = [y, x, 0, 'covered']
+            #stdscr.addstr(y, x, cell_ch, colors["cover"])
+            paintcell(stdscr, field[r][c], colors)
             # increase the column index.
             c = c + 1
         # increase the row.
@@ -101,6 +145,7 @@ def sweeper(stdscr):
         for x in range(0, field_size[1]):
             if field[y][x][2] == -1:
                 # this cell al ready filled with bomb.
+                paintcell(stdscr, field[y][x], colors, False, True)
                 continue # skip...
 
             # looking for the surrounding cells.
@@ -119,14 +164,16 @@ def sweeper(stdscr):
                             field[y][x][2] = field[y][x][2] + 1
 
             # Paint the number for quick test.
-            n = str(field[y][x][2])
-            stdscr.addstr(field[y][x][0], field[y][x][1], n, colors[n])
+            paintcell(stdscr, field[y][x], colors, False, True)
+            #n = str(field[y][x][2])
+            #stdscr.addstr(field[y][x][0], field[y][x][1], n, colors[n])
 
     # paint the reverse cell to show the cursor!
     # set current row and column.
     r, c = 0, 0
     # paint the reverse cell for the first cell.
-    stdscr.addstr(field[r][c][0], field[r][c][1], cell_ch, curses.A_REVERSE)
+    #stdscr.addstr(field[r][c][0], field[r][c][1], cell_ch, curses.A_REVERSE)
+    paintcell(stdscr, field[r][c], colors, True, True)
     nr, nc = 0, 0
 
     # try move the cursors
@@ -161,9 +208,11 @@ def sweeper(stdscr):
             continue
         else:
             # paint current spot normally
-            stdscr.addstr(field[r][c][0], field[r][c][1], cell_ch)
+            #stdscr.addstr(field[r][c][0], field[r][c][1], cell_ch)
+            paintcell(stdscr, field[r][c], colors, False, True)
             # paint the new spot reverse.
-            stdscr.addstr(field[nr][nc][0], field[nr][nc][1], cell_ch, curses.A_REVERSE)
+            #stdscr.addstr(field[nr][nc][0], field[nr][nc][1], cell_ch, curses.A_REVERSE)
+            paintcell(stdscr, field[nr][nc], colors, True, True)
             # set the current spot to new spot.
             r, c = nr, nc
 
