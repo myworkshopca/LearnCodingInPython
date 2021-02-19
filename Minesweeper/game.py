@@ -112,7 +112,9 @@ open surrounding cells except the flagged cell.
 """
 def opensurrounding(stdscr, colors, field, field_size, y, x):
 
-    # looking for the surrounding cells.
+    # TODO: check if there are correct flagged cells currounding.
+
+    # looping through the surrounding cells.
     for sy in range(y - 1, y + 1 + 1):
         for sx in range(x - 1, x + 1 + 1):
             if (sy < 0 or sy >= field_size[0] or
