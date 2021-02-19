@@ -79,6 +79,30 @@ def paintcell(stdscr, cell, colors, reverse=False, show=False):
     else:
         stdscr.addstr(cell[0], cell[1], cell_ch, cell_color)
 
+"""
+dig a cell
+"""
+def digcell():
+    return
+
+"""
+flag a cell
+"""
+def flagcell(cell):
+
+    # check and flip cell's status.
+    if cell[3] == 'covered':
+        cell[3] = 'flagged'
+    elif cell[3] == 'flagged':
+        cell[3] = 'covered'
+    # we will NOT do anything for other status.
+
+"""
+dig a cell
+"""
+def opensurrounding():
+    return
+
 # the main function
 def sweeper(stdscr):
 
@@ -202,6 +226,17 @@ def sweeper(stdscr):
             # h (104) for left
             if c > 0:
                 nc = c - 1
+        elif user_key == 100:
+            # letter d will do dig.
+            digcell()
+        elif user_key == 102:
+            # letter f (102) flag / unflag cell.
+            flagcell(field[r][c])
+            # repaint after flag!
+            paintcell(stdscr, field[r][c], colors, True)
+        elif user_key == 32:
+            # white space (32) reveal all surrounding cells.
+            opensurrounding()
 
         if nr == r and nc == c:
             # nothing change,
