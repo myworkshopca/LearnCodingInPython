@@ -19,7 +19,7 @@ def colordict():
         curses.init_pair(i + 1, i, -1)
 
     # black on red background
-    curses.init_pair(300, 0, 9)
+    curses.init_pair(300, 0, 1)
 
     return {
         "cover": curses.color_pair(9), # grey
@@ -256,8 +256,8 @@ def sweeper(stdscr):
         # collect user's input.
         user_key = stdscr.getch()
 
-        # exit when user press ESC
-        if user_key == 27:
+        # exit when user press ESC q or Q
+        if user_key in [27, 113, 81]:
             break;
 
         # decide the new head based on the direction
