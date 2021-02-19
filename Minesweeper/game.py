@@ -146,7 +146,8 @@ def sweeper(stdscr):
         for x in range(0, field_size[1]):
             if field[y][x][2] == -1:
                 # this cell al ready filled with bomb.
-                paintcell(stdscr, field[y][x], colors, False, True)
+                # paint in showall mode to debug
+                #paintcell(stdscr, field[y][x], colors, False, True)
                 continue # skip...
 
             # looking for the surrounding cells.
@@ -165,16 +166,14 @@ def sweeper(stdscr):
                             field[y][x][2] = field[y][x][2] + 1
 
             # Paint the number for quick test.
-            paintcell(stdscr, field[y][x], colors, False, True)
-            #n = str(field[y][x][2])
-            #stdscr.addstr(field[y][x][0], field[y][x][1], n, colors[n])
+            #paintcell(stdscr, field[y][x], colors, False, True)
 
     # paint the reverse cell to show the cursor!
     # set current row and column.
     r, c = 0, 0
     # paint the reverse cell for the first cell.
     #stdscr.addstr(field[r][c][0], field[r][c][1], cell_ch, curses.A_REVERSE)
-    paintcell(stdscr, field[r][c], colors, True, True)
+    paintcell(stdscr, field[r][c], colors, True)
     nr, nc = 0, 0
 
     # try move the cursors
@@ -209,11 +208,9 @@ def sweeper(stdscr):
             continue
         else:
             # paint current spot normally
-            #stdscr.addstr(field[r][c][0], field[r][c][1], cell_ch)
-            paintcell(stdscr, field[r][c], colors, False, True)
+            paintcell(stdscr, field[r][c], colors, False)
             # paint the new spot reverse.
-            #stdscr.addstr(field[nr][nc][0], field[nr][nc][1], cell_ch, curses.A_REVERSE)
-            paintcell(stdscr, field[nr][nc], colors, True, True)
+            paintcell(stdscr, field[nr][nc], colors, True)
             # set the current spot to new spot.
             r, c = nr, nc
 
