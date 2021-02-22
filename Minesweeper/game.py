@@ -304,8 +304,8 @@ def sweeper(stdscr):
             # h (104) for left
             if c > 0:
                 nc = c - 1
-        elif user_key == 100:
-            # letter d will do dig.
+        elif user_key in [100, 110, 117]:
+            # letter d (100) or n (110), u (117) will do dig.
             digcell(field[r][c])
             # repaint after dig!
             paintcell(stdscr, field[r][c], colors, True)
@@ -314,8 +314,8 @@ def sweeper(stdscr):
                 gameover()
             elif field[r][c][3] == 'revealed' and field[r][c][2] == 0:
                 opensurrounding(stdscr, colors, field, field_size, r, c)
-        elif user_key == 102:
-            # letter f (102) flag / unflag cell.
+        elif user_key in [102, 105]:
+            # letter f (102) or i (105) flag / unflag cell.
             flagcell(field[r][c])
             # repaint after flag!
             paintcell(stdscr, field[r][c], colors, True)
