@@ -134,7 +134,7 @@ this function will paint the cell based on the number of bombs
 and the cell status: covered, revealed, flagged.
 
 hare are list of characters we can use.
- ✸ 10040 ❂ 10050 ✹ 10041
+ ✸ 10040 ❂ 10050 ✹ 10041 ❄ 10052 ❋ 10059
  █ 9608 ◼ 9724
  ⚑ 9873
 """
