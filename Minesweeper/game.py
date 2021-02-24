@@ -83,11 +83,11 @@ def initfield(center, field_size):
 """
 paint the whole field.
 """
-def paintfield(stdscr, field, size):
+def paintfield(stdscr, field, size, colors):
 
     for r in range(0, size[0]):
         for c in range(0, size[1]):
-            stdscr.addstr(field[r][c][0], field[r][c][1], chr(9608))
+            stdscr.addstr(field[r][c][0], field[r][c][1], chr(9608), colors['cover'])
             #if field[r][c][2] == -1:
             #    stdscr.addstr(field[r][c][0], field[r][c][1], chr(10041))
             #else:
@@ -268,7 +268,7 @@ def sweeper(stdscr):
     field = initfield(center, field_size)
 
     # paint the whole field covered.
-    paintfield(stdscr, field, field_size)
+    paintfield(stdscr, field, field_size, colors)
 
     # paint the reverse cell to show the cursor!
     # set current row and column.
