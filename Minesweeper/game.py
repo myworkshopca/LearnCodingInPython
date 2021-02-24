@@ -107,15 +107,17 @@ def colordict():
     for i in range(0, curses.COLORS):
     #for i in range(0, 20):
         # pair number, foreground color, background color
-        curses.init_pair(i + 1, i, -1)
-
-    # black on red background
-    curses.init_pair(300, 0, 1)
+        if i == 232:
+            # black on red background
+            curses.init_pair(i + 1, i, curses.COLOR_RED)
+        else:
+            curses.init_pair(i + 1, i, -1)
+        #curses.init_pair(i + 1, i, 241)
 
     return {
         "cover": curses.color_pair(9), # grey
         "flag": curses.color_pair(12), # yellow
-        "blasted": curses.color_pair(300),
+        "blasted": curses.color_pair(233),
         #"-1": curses.color_pair(16),
         "-1": curses.color_pair(53),
         "0": curses.color_pair(1), 
