@@ -24,7 +24,8 @@ def screen(stdscr):
     for i in range(0, curses.COLORS):
     #for i in range(0, 20):
         # pair number, foreground color, background color
-        curses.init_pair(i + 1, i, -1)
+        #curses.init_pair(i + 1, i, -1)
+        curses.init_pair(i + 1, i, 244)
         #curses.init_pair(i + 1, i, 8)
         the_color = curses.color_pair(i + 1)
 
