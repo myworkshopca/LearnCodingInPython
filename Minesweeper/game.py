@@ -83,11 +83,12 @@ def initfield(center, field_size):
 """
 paint the whole field.
 """
-def paintfield(stdscr, field, size, colors):
+def paintfield(stdscr, field, size, colors, show=False):
 
     for r in range(0, size[0]):
         for c in range(0, size[1]):
-            stdscr.addstr(field[r][c][0], field[r][c][1], chr(9608), colors['cover'])
+            paintcell(stdscr, field[r][c], colors, False, show)
+            #stdscr.addstr(field[r][c][0], field[r][c][1], chr(9608), colors['cover'])
             #if field[r][c][2] == -1:
             #    stdscr.addstr(field[r][c][0], field[r][c][1], chr(10041))
             #else:
@@ -112,7 +113,7 @@ def colordict():
             curses.init_pair(i + 1, i, curses.COLOR_RED)
         else:
             curses.init_pair(i + 1, i, -1)
-        #curses.init_pair(i + 1, i, 241)
+            #curses.init_pair(i + 1, i, 241)
 
     return {
         "cover": curses.color_pair(9), # grey
@@ -143,7 +144,8 @@ hare are list of characters we can use.
 def paintcell(stdscr, cell, colors, reverse=False, show=False):
 
     # check if need show all
-    if show:
+    if show and cell[3] == 'covered':
+        # set the status to revealed for all covered cells.
         status = "revealed"
     else:
         status = cell[3]
@@ -227,7 +229,7 @@ def opensurrounding(stdscr, colors, field, field_size, y, x):
                 # blasted. set status.
                 field[sy][sx][3] = 'blasted'
                 # call game over.
-                gameover()
+                gameover(stdscr, field, field_size, colors)
             elif field[sy][sx][2] == 0:
                 # update status first
                 field[sy][sx][3] = 'revealed'
@@ -246,7 +248,12 @@ def opensurrounding(stdscr, colors, field, field_size, y, x):
 """
 Game over logic
 """
-def gameover():
+def gameover(stdscr, field, size, colors):
+
+    # TODO: set all cells revealed
+
+    # show the field with all cells revealed!
+    paintfield(stdscr, field, size, colors, True)
     return
 
 # the main function
@@ -313,7 +320,7 @@ def sweeper(stdscr):
             paintcell(stdscr, field[r][c], colors, True)
             if field[r][c][3] == 'blasted':
                 # game over
-                gameover()
+                gameover(stdscr, field, field_size, colors)
             elif field[r][c][3] == 'revealed' and field[r][c][2] == 0:
                 opensurrounding(stdscr, colors, field, field_size, r, c)
         elif user_key in [102, 105]:
