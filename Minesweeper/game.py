@@ -14,18 +14,20 @@ def initfield(center, field_size):
                    center[0] + field_size[0] // 2):
         # paint the column (x-axis) with one cell empty
         # so it will be step in 2 instead of 1
-        field.append([[0, 0, 0, 0]] * field_size[1])
+        #field.append([[0, 0, 0, 0]] * field_size[1])
+        field.append([])
         for x in range(center[1] - field_size[1],
                        center[1] + field_size[1], 2):
-            field[r][c] = [y, x, 0, 'covered']
+            #field[r][c] = [y, x, 0, 'covered']
+            field[r].append([y, x, 0, 'covered'])
             #stdscr.addstr(y, x, cell_ch, colors["cover"])
             #paintcell(stdscr, field[r][c], colors)
             # increase the column index.
-            c = c + 1
+            #c = c + 1
         # increase the row.
         r = r + 1
         # reset the column index.
-        c = 0
+        #c = 0
 
     # Generate values for the minefield:
     # number of bombs 
