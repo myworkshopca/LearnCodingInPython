@@ -210,6 +210,23 @@ open surrounding cells except the flagged cell.
 def opensurrounding(stdscr, colors, field, field_size, y, x):
 
     # TODO: check if there are correct flagged cells currounding.
+    # if the number of bombs for the current cell is NOT match
+    # the flagged cells we will not reveal any!
+    flagged = 0
+    for sy in [y - 1, y, y + 1]:
+        for sx in [x - 1, x, x + 1]:
+            if (sy < 0 or sy >= field_size[0] or
+                sx < 0 or sx >= field_size[1]):
+                # out of field.
+                continue # just skip
+            elif sy == y and sx == x:
+                # this is itself
+                continue # just skip
+            elif field[sy][sx][3] == "flagged":
+                flagged = flagged + 1
+
+    if field[y][x][2] != flagged:
+        return
 
     # looping through the surrounding cells.
     for sy in range(y - 1, y + 1 + 1):
@@ -273,7 +290,7 @@ def sweeper(stdscr):
 
     # paint the minefield.
     # set size of the field, by row x column
-    field_size = [20, 36] # [16, 30]
+    field_size = [10, 20] # [16, 30]
 
     # the initial minefield with 2 cells in the first row.
     field = initfield(center, field_size)
@@ -350,3 +367,6 @@ def sweeper(stdscr):
     #stdscr.getch()
 
 curses.wrapper(sweeper)
+# the simple way to check the field value we generated.
+#field = initfield([10, 10], [2, 2])
+#print(field)
