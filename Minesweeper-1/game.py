@@ -66,20 +66,46 @@ def initfield(center, size):
   # return the field!
   return field
 
-def paintfield(stdscr, field, size):
+def paintfield(stdscr, field, size, colors):
 
     for r in range(0, size[0]):
         for c in range(0, size[1]):
             if field[r][c][2] == -1:
-                stdscr.addstr(field[r][c][0], field[r][c][1], chr(10041))
+                stdscr.addstr(field[r][c][0], field[r][c][1], chr(10041), colors["-1"])
             else:
                 #stdscr.addstr(field[r][c][0], field[r][c][1], chr(9608))
-                stdscr.addstr(field[r][c][0], field[r][c][1], str(field[r][c][2]))
+                stdscr.addstr(field[r][c][0], field[r][c][1], str(field[r][c][2]), colors[str(field[r][c][2])])
+
+"""
+initialize curses colors and return the color dictionary.
+"""
+def colordict():
+
+    curses.start_color()
+    curses.use_default_colors()
+    for i in range(0, curses.COLORS):
+        curses.init_pair(i + 1, i, -1)
+
+    return{
+        'cover': curses.color_pair(9),
+        'flag': curses.color_pair(12),
+        '-1': curses.color_pair(53),
+        '0': curses.color_pair(1),
+        '1': curses.color_pair(13),
+        '2': curses.color_pair(48),
+        '3': curses.color_pair(10),
+        '4': curses.color_pair(52),
+        '5': curses.color_pair(94),
+        '6': curses.color_pair(203),
+        '7': curses.color_pair(90),
+        '8': curses.color_pair(178)
+    }
 
 def square(stdscr):
 
   curses.curs_set(0)
 
+  colors = colordict()
   sh, sw = stdscr.getmaxyx()
   center = [sh // 2, sw // 2]
 
@@ -87,7 +113,8 @@ def square(stdscr):
   size = [20, 50]
 
   field = initfield(center, size)
-  paintfield(stdscr, field, size)
+
+  paintfield(stdscr, field, size, colors)
 
   stdscr.getch()
 
