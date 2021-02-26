@@ -113,19 +113,48 @@ def colordict():
 
 def square(stdscr):
 
-  curses.curs_set(0)
+    curses.curs_set(0)
 
-  colors = colordict()
-  sh, sw = stdscr.getmaxyx()
-  center = [sh // 2, sw // 2]
+    colors = colordict()
+    sh, sw = stdscr.getmaxyx()
+    center = [sh // 2, sw // 2]
 
-  # row, column pair
-  size = [20, 50]
+    # row, column pair
+    size = [20, 50]
 
-  field = initfield(center, size)
+    field = initfield(center, size)
+    paintfield(stdscr, field, size, colors)
 
-  paintfield(stdscr, field, size, colors)
+    r, c = 0, 0
+    nr, nc = 0, 0
+    paintcell(stdscr, field[0][0], colors, True)
 
-  stdscr.getch()
+    while True:
+        userkey = stdscr.getch()
+
+        # 17 is ESC, 113 is q
+        if userkey in [27, 113]:
+            break;
+
+        if userkey == curses.KEY_RIGHT:
+            if c < size[1] - 1:
+                nc = c + 1
+        elif userkey == curses.KEY_LEFT:
+            if c > 0:
+                nc = c - 1
+        elif userkey == curses.KEY_DOWN:
+            if r < size[1] - 1:
+                nr = r + 1
+        elif userkey == curses.KEY_UP:
+            if r > 0:
+                nr = r - 1
+
+        if nr == r and nc == c:
+            # nothing changed!
+            continue
+        else:
+            paintcell(stdscr, field[r][c], colors, False)
+            paintcell(stdscr, field[nr][nc], colors, True)
+            r, c = nr, nc
 
 curses.wrapper(square)
