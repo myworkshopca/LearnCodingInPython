@@ -66,20 +66,25 @@ def initfield(center, size):
   # return the field!
   return field
 
-def paintfield(stdscr, field, size, colors):
+def paintfield(stdscr, field, size, colors, show=False):
 
     for r in range(0, size[0]):
         for c in range(0, size[1]):
-            paintcell(stdscr, field[r][c], colors)
+            paintcell(stdscr, field[r][c], colors, False, show)
 
 def paintcell(stdscr, cell, colors, reverse=False, show=False):
 
     # decide the character and color.
-    cell_ch = str(cell[2])
-    if cell[2] == -1:
+    cell_ch = chr(9608)
+    cell_color = colors['cover']
+
+    if show:
+        cell_ch = str(cell[2])
+        cell_color = colors[str(cell[2])]
+    if show and cell[2] == -1:
         cell_ch = chr(10041)
 
-    cell_color = colors[str(cell[2])]
+    # check reverse or not!
     if reverse:
         cell_color = curses.A_REVERSE
 
@@ -123,11 +128,11 @@ def square(stdscr):
     size = [20, 50]
 
     field = initfield(center, size)
-    paintfield(stdscr, field, size, colors)
+    paintfield(stdscr, field, size, colors, False)
 
     r, c = 0, 0
     nr, nc = 0, 0
-    paintcell(stdscr, field[0][0], colors, True)
+    paintcell(stdscr, field[0][0], colors, True, False)
 
     while True:
         userkey = stdscr.getch()
@@ -153,8 +158,8 @@ def square(stdscr):
             # nothing changed!
             continue
         else:
-            paintcell(stdscr, field[r][c], colors, False)
-            paintcell(stdscr, field[nr][nc], colors, True)
+            paintcell(stdscr, field[r][c], colors, False, False)
+            paintcell(stdscr, field[nr][nc], colors, True, False)
             r, c = nr, nc
 
 curses.wrapper(square)

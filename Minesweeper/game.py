@@ -105,7 +105,6 @@ def colordict():
     # initialize the color pair
     curses.start_color()
     curses.use_default_colors()
-    color_perrow = 16
 
     for i in range(0, curses.COLORS):
     #for i in range(0, 20):
