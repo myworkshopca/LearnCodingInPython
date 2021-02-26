@@ -70,11 +70,21 @@ def paintfield(stdscr, field, size, colors):
 
     for r in range(0, size[0]):
         for c in range(0, size[1]):
-            if field[r][c][2] == -1:
-                stdscr.addstr(field[r][c][0], field[r][c][1], chr(10041), colors["-1"])
-            else:
-                #stdscr.addstr(field[r][c][0], field[r][c][1], chr(9608))
-                stdscr.addstr(field[r][c][0], field[r][c][1], str(field[r][c][2]), colors[str(field[r][c][2])])
+            paintcell(stdscr, field[r][c], colors)
+
+def paintcell(stdscr, cell, colors, reverse=False, show=False):
+
+    # decide the character and color.
+    cell_ch = str(cell[2])
+    if cell[2] == -1:
+        cell_ch = chr(10041)
+
+    cell_color = colors[str(cell[2])]
+    if reverse:
+        cell_color = curses.A_REVERSE
+
+    # paint the cell.
+    stdscr.addstr(cell[0], cell[1], cell_ch, cell_color)
 
 """
 initialize curses colors and return the color dictionary.
