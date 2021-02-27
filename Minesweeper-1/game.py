@@ -8,22 +8,19 @@ def initfield(center, size):
   field = []
 
   # using row (r) and column (c) for index
-  r, c = 0, 0
+  r = 0
   # nested loop
   for y in range(center[0] - size[0] // 2, center[0] + size[0] // 2):
     # initialize each row.
     # repeat the size of column
-    field.append([[0,0,0]] * size[1])
+    field.append([]);
     for x in range(center[1] - size[1], center[1] + size[1], 2):
-      field[r][c] = [y, x, 0]
+      field[r].append([y, x, 0, 'covered'])
       #stdscr.addstr(y, x, chr(9608))
       # done one column in a row.
       # increase the column index.
-      c = c + 1
     # done one row. increase the row index.
     r = r + 1
-    # reset column index to 0
-    c = 0
 
   # generate the bombs! by 15% of the field cells
   # set variable i to count bombs
