@@ -289,7 +289,7 @@ def sweeper(stdscr):
 
     # paint the minefield.
     # set size of the field, by row x column
-    field_size = [10, 20] # [16, 30]
+    field_size = [16, 30] # [16, 30]
 
     # the initial minefield with 2 cells in the first row.
     field = initfield(center, field_size)
