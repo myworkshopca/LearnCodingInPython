@@ -1,4 +1,5 @@
 import curses
+from curses import textpad
 import random
 
 def screen(stdscr):
@@ -15,6 +16,23 @@ def screen(stdscr):
 
     # get screen height and width.
     sh, sw = stdscr.getmaxyx()
+    # set the center. [y-axis, x-axis]
+    center = [sh // 2, sw // 2]
+
+    # set the welcome message.
+    welcome_msg = 'Random Letters Screen Saver'
+    stdscr.addstr(1, center[1] - len(welcome_msg) // 2, welcome_msg)
+    # paint the welcome message.
+    welcome_msg = 'ESC key to exist!'
+    stdscr.addstr(2, center[1] - len(welcome_msg) // 2, welcome_msg)
+    # set up the game area.
+    # top left and bottom right
+    box = [
+        [3, 3],
+        [sh - 3, sw - 3]
+    ]
+    # draw the rectangle as the game area.
+    textpad.rectangle( stdscr, box[0][0], box[0][1], box[1][0], box[1][1])
 
     # set up this to make the while loop work.
     stdscr.nodelay(1)
@@ -22,8 +40,8 @@ def screen(stdscr):
     stdscr.timeout(100)
 
     while True:
-        y = random.randint(0, sh - 1)
-        x = random.randint(0, sw - 1)
+        y = random.randint(4, sh - 4)
+        x = random.randint(4, sw - 4)
         
         # get the random character
         char = random.randint(32, 126)
