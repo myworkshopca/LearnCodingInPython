@@ -69,17 +69,15 @@ def paintfield(stdscr, field, size, colors, show=False):
         for c in range(0, size[1]):
             paintcell(stdscr, field[r][c], colors, False, show)
 
-def paintcell(stdscr, cell, colors, reverse=False, show=False):
+def paintcell(stdscr, cell, colors, reverse=False):
 
     # decide the character and color.
-    cell_ch = chr(9608)
-    cell_color = colors['cover']
-
-    if show:
-        cell_ch = str(cell[2])
-        cell_color = colors[str(cell[2])]
-    if show and cell[2] == -1:
+    if cell[2] == -1:
         cell_ch = chr(10041)
+        cell_color = colors["-1"]
+    else: 
+        cell_ch = str(cell[2])
+        cell_color = colors[cell_ch]
 
     # check reverse or not!
     if reverse:
