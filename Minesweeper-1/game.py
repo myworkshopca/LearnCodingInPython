@@ -70,13 +70,17 @@ def printfield(center_yx, size_rc):
     for r in range(0, size_rc[0]):
         print(field[r])
 
+def debugmsg(stdscr, field, cell, show_surrounding=False):
+
+    stdscr.addstr(0, 0, str(cell));
+
 def paintfield(stdscr, field, size, colors, show=False):
 
     for r in range(0, size[0]):
         for c in range(0, size[1]):
             paintcell(stdscr, field[r][c], colors, False, show)
 
-def paintcell(stdscr, cell, colors, reverse=False):
+def paintcell(stdscr, cell, colors, reverse=False, show=False):
 
     # decide the character and color.
     if cell[2] == -1:
@@ -135,6 +139,7 @@ def square(stdscr):
     r, c = 0, 0
     nr, nc = 0, 0
     paintcell(stdscr, field[0][0], colors, True, False)
+    debugmsg(stdscr, field, field[r][c])
 
     while True:
         userkey = stdscr.getch()
@@ -150,7 +155,7 @@ def square(stdscr):
             if c > 0:
                 nc = c - 1
         elif userkey == curses.KEY_DOWN:
-            if r < size[1] - 1:
+            if r < size[0] - 1:
                 nr = r + 1
         elif userkey == curses.KEY_UP:
             if r > 0:
@@ -163,6 +168,7 @@ def square(stdscr):
             paintcell(stdscr, field[r][c], colors, False, False)
             paintcell(stdscr, field[nr][nc], colors, True, False)
             r, c = nr, nc
+            debugmsg(stdscr, field, field[r][c])
 
-#curses.wrapper(square)
-printfield([10, 10], [4, 4])
+curses.wrapper(square)
+#printfield([10, 10], [4, 4])
