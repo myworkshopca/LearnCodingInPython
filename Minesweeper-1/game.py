@@ -63,6 +63,13 @@ def initfield(center, size):
   # return the field!
   return field
 
+def printfield(center_yx, size_rc):
+
+    field = initfield(center_yx, size_rc)
+
+    for r in range(0, size_rc[0]):
+        print(field[r])
+
 def paintfield(stdscr, field, size, colors, show=False):
 
     for r in range(0, size[0]):
@@ -157,4 +164,5 @@ def square(stdscr):
             paintcell(stdscr, field[nr][nc], colors, True, False)
             r, c = nr, nc
 
-curses.wrapper(square)
+#curses.wrapper(square)
+printfield([10, 10], [4, 4])
