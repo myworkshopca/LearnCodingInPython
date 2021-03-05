@@ -23,7 +23,7 @@ def paintpalette(stdscr):
     # ✸ 10040 ❂ 10050 ✹ 10041
     # █ 9608 ◼ 9724
     # ⚑ 9873 ⚐ 9872
-    block = chr(9873)
+    block = chr(9608)
     # set the block column and rows
     block_c = 4
     block_r = 1
@@ -50,17 +50,42 @@ def paintpalette(stdscr):
         # paint the color pair id.
         stdscr.addstr(y * (block_r + 1) + block_r, x * block_c, str(i + 1), the_color)
         # paint a white space to check the color
-        stdscr.addstr(' ', the_color)
+        stdscr.addstr('   ', the_color)
 
 def screen(stdscr):
 
     # turn off the cursor.
     curses.curs_set(0)
 
-    initcolors(-1)
+    # track the background color.
+    bg = -1
+    initcolors(bg)
     paintpalette(stdscr)
 
-    # hold the window until user type any key.
-    stdscr.getch()
+    while True:
+        user_key = stdscr.getch()
+
+        # exit when user press ESC q or Q
+        if user_key in [27, 113, 81]:
+            break;
+
+        # decide the new head based on the direction
+        if user_key in [curses.KEY_UP, 107]:
+            # k (107) for up
+            if bg < curses.COLORS - 1:
+                bg = bg + 1
+            else:
+                bg = -1
+            initcolors(bg)
+            paintpalette(stdscr)
+
+        elif user_key in [curses.KEY_DOWN, 106]:
+            # j (106) for down
+            if bg >= 0:
+                bg = bg - 1
+            else:
+                bg = 255
+            initcolors(bg)
+            paintpalette(stdscr)
 
 curses.wrapper(screen)
