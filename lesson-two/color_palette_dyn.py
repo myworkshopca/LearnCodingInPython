@@ -16,14 +16,15 @@ def initcolors(bg_color=-1):
         #curses.init_pair(i + 1, i, 8)
         the_color = curses.color_pair(i + 1)
 
-def paintpalette(stdscr, center_yx):
+def paintpalette(stdscr, center_yx, bg_color):
 
     # set the block character
     # These not working well for terminal! 🏁 127937 
     # ✸ 10040 ❂ 10050 ✹ 10041
     # █ 9608 ◼ 9724
     # ⚑ 9873 ⚐ 9872
-    block = chr(9608)
+    #block = chr(9608)
+    block = chr(9724)
     # set the block column and rows
     block_c = 4
     block_r = 1
@@ -33,6 +34,18 @@ def paintpalette(stdscr, center_yx):
     # calculate the starting cell's y, x axis
     sy = center_yx[0] - (curses.COLORS // color_perrow)
     sx = center_yx[1] - (color_perrow * block_c) // 2
+
+    msg = "Curses Color Palette"
+    # print the welcome message y-axis and x-axis
+    stdscr.addstr(sy - 6, center_yx[1] - len(msg) // 2, msg)
+    # how to play.
+    msg = "Arrow Key up / down to change background color and ESC to exit!"
+    stdscr.addstr(sy - 5, center_yx[1] - len(msg) // 2, msg, curses.COLOR_GREEN)
+
+    # paint the background color here.
+    stdscr.addstr(sy - 3, sx, 'Backgroud Color: {:0>3}'.format(bg_color), curses.A_REVERSE)
+    stdscr.addstr(sy - 3, sx + 22, '     ', curses.color_pair(10))
+    stdscr.addstr(sy - 2, sx + 22, '     ', curses.color_pair(10))
 
     for i in range(0, curses.COLORS):
     #for i in range(0, 20):
@@ -66,10 +79,11 @@ def screen(stdscr):
     sh, sw = stdscr.getmaxyx()
     center = [sh // 2, sw // 2]
 
+
     # track the background color.
     bg = -1
     initcolors(bg)
-    paintpalette(stdscr, center)
+    paintpalette(stdscr, center, bg)
 
     while True:
         user_key = stdscr.getch()
@@ -86,7 +100,7 @@ def screen(stdscr):
             else:
                 bg = -1
             initcolors(bg)
-            paintpalette(stdscr, center)
+            paintpalette(stdscr, center, bg)
 
         elif user_key in [curses.KEY_DOWN, 106]:
             # j (106) for down
@@ -95,6 +109,6 @@ def screen(stdscr):
             else:
                 bg = 255
             initcolors(bg)
-            paintpalette(stdscr, center)
+            paintpalette(stdscr, center, bg)
 
 curses.wrapper(screen)
