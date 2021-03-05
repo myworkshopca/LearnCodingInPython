@@ -53,8 +53,9 @@ def paintpalette(stdscr, center_yx):
         
         # paint the color pair id.
         stdscr.addstr(sy + y * (block_r + 1) + block_r, sx + x * block_c, str(i + 1), the_color)
-        # paint a white space to check the color
-        stdscr.addstr('   ', the_color)
+        # paint a white space to match the block size: block_c
+        w_size = block_c - len(str(i))
+        stdscr.addstr(' ' * w_size, the_color)
 
 def screen(stdscr):
 
