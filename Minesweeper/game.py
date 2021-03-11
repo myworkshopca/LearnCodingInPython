@@ -2,6 +2,12 @@ import curses
 import random
 import math
 
+def printfield(center_yx, size):
+    field = initfield(center_yx, size)
+
+    for r in range(0, size[0]):
+        print(field[r])
+
 """
 """
 def initfield(center, field_size):
@@ -365,7 +371,8 @@ def sweeper(stdscr):
 
     #stdscr.getch()
 
-curses.wrapper(sweeper)
+#curses.wrapper(sweeper)
+printfield([10, 10], [4, 4])
 # the simple way to check the field value we generated.
 #field = initfield([10, 10], [2, 2])
 #print(field)
