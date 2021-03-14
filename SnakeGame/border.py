@@ -12,6 +12,7 @@ def border(stdscr):
     border_ch = chr(9608)
 
     # paint the top and bottom border, loop x-axis.
+    # range includes the start number, but NOT include end number.
     for x in range(margin_x, sw - margin_x):
         # the top border.
         stdscr.addstr(margin_y, x, border_ch)
@@ -23,7 +24,7 @@ def border(stdscr):
         # paint the left border.
         stdscr.addstr(y, margin_x, border_ch)
         # paint the right border.
-        stdscr.addstr(y, sw - margin_x, border_ch)
+        stdscr.addstr(y, sw - margin_x - 1, border_ch)
 
     stdscr.getch()
 
