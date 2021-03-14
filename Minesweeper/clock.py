@@ -5,6 +5,10 @@ def clock(stdscr):
 
     # set 0 to hide the cursor.
     curses.curs_set(0)
+    # set up this to make the while loop work.
+    stdscr.nodelay(1)
+    # timeout is using millisecond (ms) as unit
+    stdscr.timeout(50)
     
     while True:
 
