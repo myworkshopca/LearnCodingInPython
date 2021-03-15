@@ -21,18 +21,48 @@ def border(stdscr):
 
     curses.curs_set(0)
 
+    stdscr.nodelay(1)
+    stdscr.timeout(200)
+
     sh, sw = stdscr.getmaxyx()
 
     # set margin.
-    margin_y = 2
-    margin_x = 5
+    m_y, m_x = 2, 5
+    # new margin
+    n_y, n_x = 2, 5
     # set the border character.
     # █ 9608 ◼ 9724
-    border_ch = chr(9608)
+    # ▩ 9641
+    # ⬤  11044
+    # ✶ 10038, ✹ 10041, ✴ 10036, ✡ 10017
+    # ⊚ 8858 ⊙ 8857
+    # ● 9679 ◉ 9673 ⚫ 9899
+    # ⓫ 9451
+    # ❎ 10062
+    # 🏿 127999
+    # ⑤ 9316
+    # ⊞ 8862
+    border_ch = chr(127999)
 
-    paint_border(stdscr, margin_y, margin_x, sh - margin_y, sw - margin_x, border_ch)
-    stdscr.getch()
-    paint_border(stdscr, margin_y, margin_x, sh - margin_y, sw - margin_x, " ")
-    stdscr.getch()
+    while 1:
+        # collect user's input.
+        user_key = stdscr.getch()
+
+        # exit when user press ESC q or Q
+        if user_key in [27, 113, 81]:
+            break
+        elif user_key in [32]:
+            continue
+
+        # calculate the new margin.
+        n_y = m_y + 1
+        n_x = m_x + 1
+
+        # erase the old border
+        paint_border(stdscr, m_y, m_x, sh - m_y, sw - m_x, " ")
+        # paint the new border
+        paint_border(stdscr, n_y, n_x, sh - n_y, sw - n_x, border_ch)
+        # reset the new border
+        m_y, m_x = n_y, n_x
 
 curses.wrapper(border)
