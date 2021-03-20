@@ -212,62 +212,62 @@ def flagcell(cell):
 """
 open surrounding cells except the flagged cell.
 """
-def opensurrounding(stdscr, colors, field, field_size, y, x):
+def opensurrounding(stdscr, colors, field, field_size, r, c):
 
     # TODO: check if there are correct flagged cells currounding.
     # if the number of bombs for the current cell is NOT match
     # the flagged cells we will not reveal any!
-    flagged = 0
-    for sy in [y - 1, y, y + 1]:
-        for sx in [x - 1, x, x + 1]:
-            if (sy < 0 or sy >= field_size[0] or
-                sx < 0 or sx >= field_size[1]):
-                # out of field.
-                continue # just skip
-            elif sy == y and sx == x:
-                # this is itself
-                continue # just skip
-            elif field[sy][sx][3] == "flagged":
-                flagged = flagged + 1
-
-    if field[y][x][2] != flagged:
-        return
+    #flagged = 0
+    #for sr in [r - 1, r, r + 1]:
+    #    for sc in [c - 1, c, c + 1]:
+    #        if (sr < 0 or sr >= field_size[0] or
+    #            sc < 0 or sc >= field_size[1]):
+    #            # out of field.
+    #            continue # just skip
+    #        elif sr == r and sc == c:
+    #            # this is itself
+    #            continue # just skip
+    #        elif field[sr][sc][3] == "flagged":
+    #            flagged = flagged + 1
+#
+    #if field[r][c][2] != flagged:
+    #    return
 
     # looping through the surrounding cells.
-    for sy in range(y - 1, y + 1 + 1):
-        for sx in range(x - 1, x + 1 + 1):
-            if (sy < 0 or sy >= field_size[0] or
-                sx < 0 or sx >= field_size[1]):
+    for sr in [r - 1, r, r + 1]:
+        for sc in [c - 1, c, c + 1]:
+            if (sr < 0 or sr >= field_size[0] or
+                sc < 0 or sc >= field_size[1]):
                 # out of field.
                 continue # just skip
-            elif sy == y and sx == x:
+            elif sr == r and sc == c:
                 # this is itself
                 continue # just skip
-            elif field[sy][sx][3] == "flagged":
+            elif field[sr][sc][3] == "flagged":
                 # this cell is flagged, skip
                 continue
-            elif field[sy][sx][3] == "revealed":
+            elif field[sr][sc][3] == "revealed":
                 # this cell is revealed, skip
                 continue
-            elif field[sy][sx][2] == -1:
+            elif field[sr][sc][2] == -1:
                 # blasted. set status.
-                field[sy][sx][3] = 'blasted'
+                field[sr][sc][3] = 'blasted'
                 # call game over.
                 gameover(stdscr, field, field_size, colors)
-            elif field[sy][sx][2] == 0:
+            elif field[sr][sc][2] == 0:
                 # update status first
-                field[sy][sx][3] = 'revealed'
+                field[sr][sc][3] = 'revealed'
                 # number of bombs surrounding is 0
                 # tells there is no bombs around.
                 # So we open all surroundings.
                 # call itself again.
-                opensurrounding(stdscr, colors, field, field_size, sy, sx)
+                opensurrounding(stdscr, colors, field, field_size, sr, sc)
             else:
                 # set status to revealed.
-                field[sy][sx][3] = 'revealed'
+                field[sr][sc][3] = 'revealed'
 
             # repaint this surrounding cell normally
-            paintcell(stdscr, field[sy][sx], colors)
+            paintcell(stdscr, field[sr][sc], colors)
 
 """
 Game over logic
