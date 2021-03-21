@@ -19,10 +19,15 @@ def paint_border(stdscr, uly, ulx, lry, lrx, border_ch):
 
 def border(stdscr):
 
-    curses.curs_set(0)
+    # turn off default cursor
+    curses.curs_set(False)
 
-    stdscr.nodelay(1)
-    stdscr.timeout(200)
+    # set this variable to track nodelay or not.
+    nodelay = True
+    stdscr.nodelay(nodelay)
+    # timeout is on millionsecond
+    nodelay_timeout = 200
+    stdscr.timeout(nodelay_timeout)
 
     sh, sw = stdscr.getmaxyx()
 
@@ -31,6 +36,9 @@ def border(stdscr):
     # new margin
     n_y, n_x = 2, 5
     # set the border character.
+    # ֍ 🄂🊭 🈪
+    # 🨄  🩡
+    # ❶ 10102 ⓵  9461
     # █ 9608 ◼ 9724
     # ▩ 9641
     # ⬤  11044
@@ -39,6 +47,7 @@ def border(stdscr):
     # ● 9679 ◉ 9673 ⚫ 9899
     # ⓫ 9451
     # ❎ 10062
+    # ✖ 10006
     # 🏿 127999
     # ⑤ 9316
     # ⊞ 8862
@@ -49,10 +58,20 @@ def border(stdscr):
         user_key = stdscr.getch()
 
         # exit when user press ESC q or Q
-        if user_key in [27, 113, 81]:
+        if user_key in [27, ord('q'), ord('Q')]:
             break
-        elif user_key in [32]:
-            continue
+        elif user_key in [ord(' ')]:
+            # using white space to perform pause and resume.
+            if nodelay:
+                nodelay = False
+                stdscr.nodelay(nodelay)
+                nodelay_timeout = -1
+                stdscr.timeout(nodelay_timeout)
+            else:
+                nodelay = True
+                stdscr.nodelay(nodelay)
+                nodelay_timeout = 120
+                stdscr.timeout(nodelay_timeout)
 
         # calculate the new margin.
         n_y = m_y + 1
