@@ -4,7 +4,7 @@ def paint_border(stdscr, uly, ulx, lry, lrx, border_ch):
 
     # paint the top and bottom border, loop x-axis.
     # range includes the start number, but NOT include end number.
-    for x in range(ulx, lrx + 1):
+    for x in range(ulx, lrx + 1, 2):
         # the top border.
         stdscr.addstr(uly, x, border_ch)
         # the bottom border.
@@ -23,15 +23,15 @@ def border(stdscr):
     curses.curs_set(False)
 
     # set this variable to track nodelay or not.
-    nodelay = True
+    nodelay = False
     stdscr.nodelay(nodelay)
     # timeout is on millionsecond
-    nodelay_timeout = 200
+    nodelay_timeout = -1
     stdscr.timeout(nodelay_timeout)
 
     sh, sw = stdscr.getmaxyx()
 
-    # set margin.
+    # set starting margin.
     m_y, m_x = 2, 5
     # new margin
     n_y, n_x = 2, 5
@@ -51,7 +51,8 @@ def border(stdscr):
     # 🏿 127999
     # ⑤ 9316
     # ⊞ 8862
-    border_ch = chr(127999)
+    border_code = 127999
+    #border_ch = chr(127999)
 
     while 1:
         # collect user's input.
@@ -72,15 +73,29 @@ def border(stdscr):
                 stdscr.nodelay(nodelay)
                 nodelay_timeout = 120
                 stdscr.timeout(nodelay_timeout)
+        elif user_key in [ord('j')]:
+            # decrease border code.
+            border_code -= 1
+        elif user_key in [ord('k')]:
+            # increase border code.
+            border_code += 1
 
         # calculate the new margin.
-        n_y = m_y + 1
-        n_x = m_x + 1
+        #n_y = m_y + 1
+        #n_x = m_x + 1
+
+        # paint the unicode at the center of the screen.
+        msg = ' ' * 30
+        stdscr.addstr(sh // 2, sw // 2 - len(msg) // 2, msg)
+        stdscr.addstr(sh // 2 + 1, sw // 2 - len(msg) // 2, msg)
+        msg = 'UNICODE: {0} - {1}'.format(border_code, chr(border_code))
+        stdscr.addstr(sh // 2, sw // 2 - len(msg) // 2, msg)
+        stdscr.addstr(sh // 2 + 1, sw // 2 - len(msg) // 2, "-" * len(msg))
 
         # erase the old border
-        paint_border(stdscr, m_y, m_x, sh - m_y, sw - m_x, " ")
+        paint_border(stdscr, m_y, m_x, sh - m_y, sw - m_x, "  ")
         # paint the new border
-        paint_border(stdscr, n_y, n_x, sh - n_y, sw - n_x, border_ch)
+        paint_border(stdscr, n_y, n_x, sh - n_y, sw - n_x, chr(border_code))
         # reset the new border
         m_y, m_x = n_y, n_x
 
