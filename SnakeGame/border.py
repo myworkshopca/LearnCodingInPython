@@ -53,6 +53,7 @@ def border(stdscr):
     # ⊞ 8862
     border_code = 127999
     #border_ch = chr(127999)
+    step = 1
 
     while 1:
         # collect user's input.
@@ -71,14 +72,18 @@ def border(stdscr):
             else:
                 nodelay = True
                 stdscr.nodelay(nodelay)
-                nodelay_timeout = 120
+                nodelay_timeout = 500
                 stdscr.timeout(nodelay_timeout)
         elif user_key in [ord('j')]:
             # decrease border code.
-            border_code -= 1
+            step = -1
+            border_code += step
         elif user_key in [ord('k')]:
             # increase border code.
-            border_code += 1
+            step = 1
+            border_code += step
+        elif nodelay and user_key == -1:
+            border_code += step
 
         # calculate the new margin.
         #n_y = m_y + 1
