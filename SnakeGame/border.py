@@ -17,6 +17,47 @@ def paint_border(stdscr, uly, ulx, lry, lrx, border_ch):
         # paint the right border.
         stdscr.addstr(y, lrx, border_ch)
 
+def changecode(stdscr, sh, sw):
+
+    # assume we are in the blocking model.
+
+    # calculate the starting unit.
+    sy = sh // 2 - 5
+    sx = sw // 2 - 10
+
+    # turn on the cursor.
+    curses.curs_set(True)
+    msg = "Enter new code: "
+    # erease the previous input.
+    stdscr.addstr(sy, sx, " " * 30)
+    stdscr.addstr(sy, sx, msg)
+
+    user_i = ''
+    while True:
+        key = stdscr.getch()
+        if key in [ord('0'), ord('1'), ord('2'), ord('3'), ord('4'),
+                   ord('5'), ord('6'), ord('7'), ord('8'), ord('9')]:
+            user_i = user_i + chr(key)
+            stdscr.addstr(sy, sx + len(msg), user_i)
+        elif key == 263:
+            # the del key.
+            if len(user_i) > 0:
+                # there are some user input exist!
+                # erease all first.
+                stdscr.addstr(sy, sx + len(msg), ' ' * len(user_i))
+                # remove the last one.
+                user_i = user_i[0:-1]
+                stdscr.addstr(sy, sx + len(msg), user_i)
+        elif key == 10:
+            # the Enter key.
+            # turn off the cursor.
+            curses.curs_set(False)
+            break
+        else:
+            continue
+
+    return int(user_i)
+
 def border(stdscr):
 
     # turn off default cursor
@@ -62,6 +103,14 @@ def border(stdscr):
         # exit when user press ESC q or Q
         if user_key in [27, ord('q'), ord('Q')]:
             break
+        elif user_key in [ord('c')]:
+            # turn off nodelay mode.
+            nodelay = False
+            stdscr.nodelay(nodelay)
+            nodelay_timeout = -1
+            stdscr.timeout(nodelay_timeout)
+            # change the unicode code.
+            border_code = changecode(stdscr, sh, sw)
         elif user_key in [ord(' ')]:
             # using white space to perform pause and resume.
             if nodelay:
